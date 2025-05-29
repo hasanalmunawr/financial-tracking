@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +33,14 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+
+    Route::prefix('/category')->group(function () {
+       Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+    });
+
+    Route::prefix('/transaction')->group(function () {
+       Route::get('/', [TransactionController::class, 'index'])->name('transaction.index');
+    });
 });
 
 Route::middleware('auth')->group(function () {
