@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,10 +37,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('/category')->group(function () {
        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+       Route::post('/', [CategoryController::class, 'store'])->name('category.store');
+       Route::get('/my-category', [CategoryController::class, 'getMyCategory'])->name('category.get-my-Category');
     });
 
     Route::prefix('/transaction')->group(function () {
        Route::get('/', [TransactionController::class, 'index'])->name('transaction.index');
+       Route::post('/', [TransactionController::class, 'store'])->name('transaction.store');
+       Route::get('/my-transaction', [TransactionController::class, 'getMyTransactions'])->name('transaction.get-my-Transaction');
+    });
+
+    Route::prefix('/rekening')->group(function () {
+       Route::get('/', [RekeningController::class, 'index'])->name('rekening.index');
+       Route::get('/my-rekening', [RekeningController::class, 'getMyRekening'])->name('rekening.get-my-rekening');
     });
 });
 
