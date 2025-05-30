@@ -39,10 +39,16 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink :href="route('rekening.index')" :active="route().current('rekening.index')">
+                                    Rekening
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('category.index')" :active="route().current('category.index')">
                                     Category
                                 </NavLink>
                             </div>
+
 
                         </div>
 

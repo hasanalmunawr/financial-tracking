@@ -19,7 +19,8 @@ const props = defineProps({
 
 const formData = {
     name: props.category.name,
-    type: props.category.type
+    type: props.category.type,
+    amount: props.category.amount
 }
 
 if (props.method) {
@@ -49,6 +50,7 @@ watch(
     (newCategory) => {
         form.name = newCategory.name || "";
         form.type = newCategory.type || "";
+        form.amount = newCategory.amount || "";
 
         if (props.method) {
             form._method = props.method;
@@ -65,29 +67,17 @@ watch(
 
 <template>
     <form @submit.prevent="submitForm">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <!-- Branch Name -->
-            <div>
-                <label class="block font-semibold text-gray-700">Category Name <span class="text-red-500">*</span></label>
-                <input
-                    type="text"
-                    v-model="form.name"
-                    placeholder="Enter Branch Name"
-                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500  transition ease-in-out"
-                    required
-                />
-            </div>
-
-            <!-- Branch Type -->
-            <div>
-                <label class="block font-semibold text-gray-700">Category Type <span class="text-red-500">*</span></label>
-                <select name="" v-model="form.type" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500  transition ease-in-out">
-                    <option value="" selected disabled>Select Type</option>
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-            </div>
+        <!-- Branch Name -->
+        <div>
+            <label class="block font-semibold text-gray-700">Category <span class="text-red-500">*</span></label>
+            <input
+                type="text"
+                v-model="form.name"
+                placeholder="Enter Category eg.Gaji"
+                class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300"
+                required
+            />
         </div>
 
         <!-- Submit Button -->
