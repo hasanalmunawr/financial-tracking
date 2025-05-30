@@ -1,4 +1,5 @@
-export default {
+// ✅ Benar (CommonJS)
+module.exports = {
     plugins: {
         tailwindcss: {},
         autoprefixer: {},

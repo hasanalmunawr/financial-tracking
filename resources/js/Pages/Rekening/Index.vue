@@ -1,59 +1,65 @@
 <script setup>
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Head} from "@inertiajs/vue3";
 import ContainerContent from "@/Components/Common/ContainerContent.vue";
+import EyeOff from "vue-material-design-icons/EyeOff.vue";
+import Eye from "vue-material-design-icons/Eye.vue";
+import {ref} from "vue";
+import RekeningCreate from "@/Components/Rekening/RekeningCreate.vue";
 import Modal from "@/Components/Common/Modal.vue";
-import CreateCategory from "@/Components/Category/CreateCategory.vue";
 import {useModal} from "@/Composable/useModal";
 
-const {isOpen, showModal, hideModal, modalTitle} = useModal();
-
-defineProps({
-    categories: {
+const props = defineProps({
+    rekenings: {
         type: Array,
         required: true
     }
 })
 
-const newCategory = () => {
-    modalTitle.value = "New Category"
-    isOpen.value = true
-}
+const {isOpen, showModal, hideModal, modalTitle} = useModal();
+
+
+// Map visibilitas berdasarkan index
+const showNominalMap = ref({});
+
+// Inisialisasi semua `false`
+props.rekenings.forEach((_, index) => {
+    showNominalMap.value[index] = false;
+});
+
+// Fungsi toggle
+const toggleNominal = (index) => {
+    showNominalMap.value[index] = !showNominalMap.value[index];
+};
 
 const formatRupiah = (value) => {
     if (!value) return 'Rp. 0';
     return 'Rp. ' + Number(value).toLocaleString('id-ID');
 }
 
-const formatDate = (datetime, locale = 'id-ID') => {
-    const date = new Date(datetime);
-    return date.toLocaleString(locale, {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-    });
+const newRekening = () => {
+    modalTitle.value = "New Rekening"
+    isOpen.value = true
 }
 </script>
 
 <template>
-    <Head title="Transaction Category"/>
-
+    <Head title="Rekening"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Transaction Category</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Rekening</h2>
         </template>
 
         <ContainerContent>
 
             <div class="flex justify-end mb-4">
-                <button @click="newCategory" type="button"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    New Category
+                <button @click="newRekening" type="button"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    New Rekening
                 </button>
             </div>
+
 
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
@@ -63,10 +69,13 @@ const formatDate = (datetime, locale = 'id-ID') => {
                             No
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Category Name
+                            Name
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Created At
+                            Type
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Saldo
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Action
@@ -75,15 +84,24 @@ const formatDate = (datetime, locale = 'id-ID') => {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(category, index) in categories" :key="category.id" class="bg-white border-b border-gray-200">
+                    <tr v-for="(rekening, index) in rekenings" :key="rekening.id"
+                        class="bg-white border-b border-gray-200">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                             {{ index + 1 }}
                         </th>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                            {{ category.name }}
+                            {{ rekening.name }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ formatDate(category.created_at) }}
+                            {{ rekening.type }}
+                        </td>
+                        <td class="relative px-6 py-4">
+                            {{ showNominalMap[index] ? formatRupiah(rekening.balance) : '**********' }}
+                            <span @click="toggleNominal(index)"
+                                  class="absolute right-3 top-3 h-5 w-5 cursor-pointer text-blue-500">
+                              <Eye v-if="!showNominalMap[index]"/>
+                              <EyeOff v-else/>
+                            </span>
                         </td>
                         <td class="px-6 py-4">
                             <button>Edit</button>
@@ -98,7 +116,7 @@ const formatDate = (datetime, locale = 'id-ID') => {
     </AuthenticatedLayout>
 
     <Modal :title="modalTitle" :is-open="isOpen" @close="hideModal">
-        <CreateCategory @close="hideModal"/>
+        <RekeningCreate @close="hideModal"/>
     </Modal>
 </template>
 

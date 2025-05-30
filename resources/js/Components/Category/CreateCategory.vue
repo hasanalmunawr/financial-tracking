@@ -14,7 +14,7 @@ const emit = defineEmits(['success'])
 
 <template>
     <category-form
-        :action="route('dashboard')"
+        :action="route('category.store')"
         :category="category"
         @success="emit('success')"
     />
