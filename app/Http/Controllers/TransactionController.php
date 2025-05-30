@@ -14,7 +14,7 @@ class TransactionController extends Controller
     {
         return inertia('Transaction/Index', []);
     }
-
+  
     public function store(Request $request)
     {
         $request->validate([
@@ -74,4 +74,5 @@ class TransactionController extends Controller
             'data' => $transactions
         ]);
     }
+
 }
