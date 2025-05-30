@@ -49,6 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('/rekening')->group(function () {
        Route::get('/', [RekeningController::class, 'index'])->name('rekening.index');
+       Route::post('/', [RekeningController::class, 'store'])->name('rekening.store');
        Route::get('/my-rekening', [RekeningController::class, 'getMyRekening'])->name('rekening.get-my-rekening');
     });
 });

@@ -16,7 +16,7 @@ const emit = defineEmits(['success'])
 
 <template>
 <RekeningForm
-    :action="route('transaction.store')"
+    :action="route('rekening.store')"
     :rekening="rekening"
     @success="emit('success')"
 />

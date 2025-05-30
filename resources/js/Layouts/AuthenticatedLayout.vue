@@ -1,13 +1,33 @@
 <script setup>
-import { ref } from 'vue';
+import {computed, reactive, ref, toRefs} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link, router, usePage} from '@inertiajs/vue3';
+import Toast from "@/Components/Common/Toast.vue";
 
 const showingNavigationDropdown = ref(false);
+
+const page = usePage();
+const { user } = toRefs(page.props);
+const currentUser = computed(() => user.value?.data);
+
+
+// TOAST
+const state = reactive({
+    toastMessage: ""
+});
+
+router.on("finish", () => {
+    state.toastMessage = page.props.toast?.success || "";
+});
+
+const toastIsi = () => {
+    state.toastMessage = "Hello guys ini toast nya, nanti muncul yak di sini"
+}
+
 </script>
 
 <template>
@@ -26,6 +46,10 @@ const showingNavigationDropdown = ref(false);
                                     />
                                 </Link>
                             </div>
+
+                            <button
+                            @click="toastIsi"
+                            >click</button>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -166,4 +190,5 @@ const showingNavigationDropdown = ref(false);
             </main>
         </div>
     </div>
+    <Toast :message="state.toastMessage" @clear="state.toastMessage = ''" />
 </template>

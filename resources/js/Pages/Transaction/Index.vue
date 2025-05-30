@@ -144,7 +144,7 @@ onMounted(() => {
     </AuthenticatedLayout>
 
     <Modal :title="modalTitle" :is-open="isOpen" @close="hideModal">
-        <TransactionCreate @close="hideModal"/>
+        <TransactionCreate @success="hideModal"/>
     </Modal>
 </template>
 

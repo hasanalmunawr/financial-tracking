@@ -98,7 +98,7 @@ const formatDate = (datetime, locale = 'id-ID') => {
     </AuthenticatedLayout>
 
     <Modal :title="modalTitle" :is-open="isOpen" @close="hideModal">
-        <CreateCategory @close="hideModal"/>
+        <CreateCategory @success="hideModal"/>
     </Modal>
 </template>
 

@@ -116,7 +116,7 @@ const newRekening = () => {
     </AuthenticatedLayout>
 
     <Modal :title="modalTitle" :is-open="isOpen" @close="hideModal">
-        <RekeningCreate @close="hideModal"/>
+        <RekeningCreate @success="hideModal"/>
     </Modal>
 </template>
 
