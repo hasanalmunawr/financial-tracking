@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('rekenings', function (Blueprint $table) {
             $table->id();
-            $table->string('name');;
+            $table->string('name');
+            $table->string('type');
+            $table->bigInteger('balance')->default(0);
             $table->auditColumns();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('rekenings');
     }
 };

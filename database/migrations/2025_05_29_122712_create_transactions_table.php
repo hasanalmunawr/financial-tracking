@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_id')->nullable();
-            $table->float('amount');
+            $table->bigInteger('rekening_id')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->decimal('amount', 15, 2)->default(0);
             $table->text('description')->nullable();
             $table->date('date');
             $table->string('type');
             $table->string('note')->nullable();
-            $table->timestamps();
+            $table->auditColumns();
         });
     }
 
