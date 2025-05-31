@@ -152,6 +152,8 @@ onMounted(() => {
                     <option disabled selected value="">Select Type</option>
                     <option value="income">Income</option>
                     <option value="expense">Expense</option>
+                    <option value="mutasi+">Mutasi +</option>
+                    <option value="mutasi -">Mutasi -</option>
                 </select>
             </div>
 

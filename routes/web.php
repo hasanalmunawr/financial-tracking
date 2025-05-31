@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\TransactionController;
@@ -34,6 +35,10 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::prefix('/dashboard')->group(function () {
+       Route::get('/get-monthly-income-expense', [DashboardController::class, 'getDashboardIncomeExpense'])->name('dashboard.get-monthly-income-expense');
+       Route::get('/get-expense-categories', [DashboardController::class, 'getDashboardExpenseCategory'])->name('dashboard.get-expense-categories');
+    });
 
     Route::prefix('/category')->group(function () {
        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
