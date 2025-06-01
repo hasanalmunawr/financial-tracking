@@ -84,7 +84,7 @@ watch(
             <!-- Nominal -->
             <div class="mb-2">
                 <label class="block mb-1 text-sm font-medium text-gray-700">Rekening Nominal (default 0)</label>
-                <input type="number" v-model.number="form.amount" required
+                <input type="number" v-model.number="form.balance" required
                        class="w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300"/>
             </div>
         </div>

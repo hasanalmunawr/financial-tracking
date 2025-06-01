@@ -14,7 +14,7 @@ class TransactionController extends Controller
     {
         return inertia('Transaction/Index', []);
     }
-  
+
     public function store(Request $request)
     {
         $request->validate([
@@ -30,7 +30,7 @@ class TransactionController extends Controller
         $rekening = Rekening::findOrFail($request->source);
 
         // Update saldo berdasarkan tipe transaksi
-        if ($request->type === 'income') {
+        if ($request->type === 'income' || $request->type === 'mutasi+') {
             $rekening->balance += $request->amount;
         } else { // expense
             $rekening->balance -= $request->amount;
@@ -57,6 +57,8 @@ class TransactionController extends Controller
         $transactions = DB::table('transactions')
             ->join('rekenings', 'rekenings.id', '=', 'transactions.rekening_id')
             ->join('categories', 'categories.id', '=', 'transactions.category_id')
+            ->whereYear('transactions.date', $request->year)
+            ->whereMonth('transactions.date', $request->month)
             ->select(
                 'transactions.amount',
                 'transactions.description',
@@ -74,5 +76,4 @@ class TransactionController extends Controller
             'data' => $transactions
         ]);
     }
-
 }

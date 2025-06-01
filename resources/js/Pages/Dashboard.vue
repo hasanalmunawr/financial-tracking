@@ -2,6 +2,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from '@inertiajs/vue3';
 import ContainerContent from "@/Components/Common/ContainerContent.vue";
+
+import DashboardMonthlyIncomeExpense from "@/Components/Dashboard/DashboardMonthlyIncomeExpense.vue";
+import DashboardExpenseCategory from "@/Components/Dashboard/DashboardExpenseCategory.vue";
+
+
+console.log(route('dashboard.get-expense-categories'))
 </script>
 
 <template>
@@ -13,15 +19,9 @@ import ContainerContent from "@/Components/Common/ContainerContent.vue";
         </template>
 
         <ContainerContent>
-            You're login
+            <DashboardMonthlyIncomeExpense/>
+            <DashboardExpenseCategory/>
         </ContainerContent>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">You're logged in!</div>
-                </div>
-            </div>
-        </div>
     </AuthenticatedLayout>
 </template>

@@ -6,11 +6,12 @@ import ContainerContent from "@/Components/Common/ContainerContent.vue";
 import {useModal} from "@/Composable/useModal";
 import Modal from "@/Components/Common/Modal.vue";
 import TransactionCreate from "@/Components/Transaction/TransactionCreate.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
 const {isOpen, showModal, hideModal, modalTitle} = useModal();
 
 const transactions = ref([]);
+const selectedMonth = ref(new Date().toISOString().slice(0, 7)); // format YYYY-MM
 
 const newTransaction = () => {
     modalTitle.value = "New Transaction"
@@ -35,8 +36,14 @@ const formatDate = (datetime, locale = 'id-ID') => {
 }
 
 const loadTransactions = () => {
-    axios.get(route('transaction.get-my-Transaction'))
-        .then(response => {
+    const [year, month] = selectedMonth.value.split('-');
+
+    axios.get(route('transaction.get-my-Transaction'), {
+        params: {
+            year,
+            month
+        }
+    }).then(response => {
             transactions.value = response.data.data;
         })
         .catch(error => {
@@ -44,10 +51,11 @@ const loadTransactions = () => {
         });
 }
 
-onMounted(() => {
-    loadTransactions();
-})
+// Reload chart data when month changes
+watch(selectedMonth, loadTransactions);
 
+// Load initial chart
+loadTransactions();
 </script>
 
 <template>
@@ -63,13 +71,38 @@ onMounted(() => {
 
         <ContainerContent>
 
-            <div class="flex justify-between mb-4">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Transaction History</h2>
-                <button @click="newTransaction" type="button"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    New Transaction
-                </button>
-            </div>
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <!-- Left: Bulan Picker -->
+                    <div class="w-full md:w-auto">
+                        <label for="month-picker" class="block text-sm font-medium text-gray-700 mb-1">
+                            Pilih Bulan
+                        </label>
+                        <input
+                            id="month-picker"
+                            type="month"
+                            class="border rounded px-3 py-2 w-full md:w-48 text-sm"
+                            v-model="selectedMonth"
+                        />
+                    </div>
+
+                    <!-- Middle: Judul -->
+                    <h2 class="text-lg font-semibold text-gray-800 text-center md:text-left">
+                        Transaction History
+                    </h2>
+
+                    <!-- Right: Tombol -->
+                    <button
+                        @click="newTransaction"
+                        type="button"
+                        class="whitespace-nowrap text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 shadow"
+                    >
+                        New Transaction
+                    </button>
+                </div>
+
+                <!-- Bisa letakkan chart atau tabel di bawah ini -->
+                <!-- <ChartComponent /> -->
 
 
                 <ul class="divide-y divide-gray-200">
@@ -92,59 +125,57 @@ onMounted(() => {
                                 :class="item.type === 'income' ? 'text-green-700' : 'text-red-700'"
                                 class="text-lg font-semibold"
                             >
-                               {{ item.type === 'income' ? '+' : '-'}} {{ formatRupiah(item.amount) }}
+                                {{ item.type === 'income' ? '+' : '-' }} {{ formatRupiah(item.amount) }}
                             </p>
                         </div>
                     </li>
                 </ul>
 
+            <!--            <div class="relative overflow-x-auto">-->
+            <!--                <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">-->
+            <!--                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">-->
+            <!--                    <tr>-->
+            <!--                        <th scope="col" class="px-6 py-3">-->
+            <!--                            Category Name-->
+            <!--                        </th>-->
+            <!--                        <th scope="col" class="px-6 py-3">-->
+            <!--                            Category Type-->
+            <!--                        </th>-->
+            <!--                        <th scope="col" class="px-6 py-3">-->
+            <!--                            Created Date-->
+            <!--                        </th>-->
+            <!--                        <th scope="col" class="px-6 py-3">-->
+            <!--                            Action-->
+            <!--                        </th>-->
 
+            <!--                    </tr>-->
+            <!--                    </thead>-->
+            <!--                    <tbody>-->
+            <!--                    <tr v-for="category in categories" :key="category.id" class="bg-white border-b border-gray-200">-->
+            <!--                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">-->
+            <!--                            {{ category.name }}-->
+            <!--                        </th>-->
+            <!--                        <td class="px-6 py-4">-->
+            <!--                            {{ category.type }}-->
+            <!--                        </td>-->
+            <!--                        <td class="px-6 py-4">-->
+            <!--                            {{ category.created_at }}-->
+            <!--                        </td>-->
+            <!--                        <td class="px-6 py-4">-->
+            <!--                            <button>Edit</button>-->
+            <!--                        </td>-->
 
-<!--            <div class="relative overflow-x-auto">-->
-<!--                <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">-->
-<!--                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">-->
-<!--                    <tr>-->
-<!--                        <th scope="col" class="px-6 py-3">-->
-<!--                            Category Name-->
-<!--                        </th>-->
-<!--                        <th scope="col" class="px-6 py-3">-->
-<!--                            Category Type-->
-<!--                        </th>-->
-<!--                        <th scope="col" class="px-6 py-3">-->
-<!--                            Created Date-->
-<!--                        </th>-->
-<!--                        <th scope="col" class="px-6 py-3">-->
-<!--                            Action-->
-<!--                        </th>-->
-
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    <tr v-for="category in categories" :key="category.id" class="bg-white border-b border-gray-200">-->
-<!--                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">-->
-<!--                            {{ category.name }}-->
-<!--                        </th>-->
-<!--                        <td class="px-6 py-4">-->
-<!--                            {{ category.type }}-->
-<!--                        </td>-->
-<!--                        <td class="px-6 py-4">-->
-<!--                            {{ category.created_at }}-->
-<!--                        </td>-->
-<!--                        <td class="px-6 py-4">-->
-<!--                            <button>Edit</button>-->
-<!--                        </td>-->
-
-<!--                    </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
+            <!--                    </tr>-->
+            <!--                    </tbody>-->
+            <!--                </table>-->
+            <!--            </div>-->
 
         </ContainerContent>
 
     </AuthenticatedLayout>
 
     <Modal :title="modalTitle" :is-open="isOpen" @close="hideModal">
-        <TransactionCreate @close="hideModal"/>
+        <TransactionCreate @success="hideModal"/>
     </Modal>
 </template>
 
