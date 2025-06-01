@@ -2,6 +2,8 @@
 import {ref, onMounted, watch} from 'vue'
 import axios from 'axios'
 
+const expense = ref([])
+
 const chartExpenseCategory = ref({
     title: {
         text: 'Expense by Category',
@@ -48,7 +50,7 @@ const loadExpenseByCategory = () => {
     })
         .then(response => {
             const data = response.data.data || []
-
+            expense.value = response.data.data || []
             const pieData = data.map(item => ({
                 name: item.category,
                 value: item.category_total
@@ -78,6 +80,42 @@ loadExpenseByCategory();
             v-model="selectedMonth"
         />
         <v-chart class="w-full h-96" :option="chartExpenseCategory" autoresize />
+
+        <div class="overflow-x-auto bg-white p-4 rounded shadow mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Ringkasan Pengeluaran per Kategori</h3>
+
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-2 text-left text-gray-600 font-medium">Kategori</th>
+                    <th class="px-4 py-2 text-left text-gray-600 font-medium">Total Pengeluaran</th>
+                    <th class="px-4 py-2 text-left text-gray-600 font-medium">Jumlah Transaksi</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                <tr v-for="exs in expense" :key="exs.category" class="hover:bg-gray-50">
+                    <td class="px-4 py-2 text-gray-700">{{ exs.category }}</td>
+                    <td class="px-4 py-2 text-gray-700">Rp {{ parseFloat(exs.category_total).toLocaleString('id-ID') }}</td>
+                    <td class="px-4 py-2 text-gray-700">{{ exs.total_transactions }}</td>
+                </tr>
+                </tbody>
+                <tfoot class="bg-gray-100 font-semibold">
+                <tr>
+                    <td class="px-4 py-2 text-gray-800">Total</td>
+                    <td class="px-4 py-2 text-gray-800">
+                        Rp {{
+                            expense.reduce((sum, exs) => sum + parseFloat(exs.category_total), 0)
+                                .toLocaleString('id-ID')
+                        }}
+                    </td>
+                    <td class="px-4 py-2 text-gray-800">
+                        {{ expense.reduce((sum, exs) => sum + exs.total_transactions, 0) }}
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
     </div>
 </template>
 
