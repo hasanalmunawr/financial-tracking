@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    image: hasanalmunawr/financial-track:latest
+    container_name: financial-track-app
+    restart: unless-stopped
+    expose:
+      - "9000" # Laravel pakai php-fpm biasanya di 9000
+    environment:
+      APP_NAME: My-Financial
+      APP_KEY: base64:ZVFyrxg+11A3dA/G8IZ48NTpSKmlc6T8CevBS/cGtkU=
+      APP_ENV: production
+      APP_URL: http://137.66.35.13
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: hasan_app
+      DB_USERNAME: nasah
+      DB_PASSWORD: Almun4w4r07
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - db
+    networks:
+      - financial
+
+  db:
+    image: mariadb:10
+    container_name: financial-track-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Almun4w4r07
+      MYSQL_DATABASE: hasan_app
+      MYSQL_USER: nasah
+      MYSQL_PASSWORD: Almun4w4r07
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - financial
+
+  nginx:
+    image: nginx:alpine
+    container_name: financial-track-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - financial
+
+volumes:
+  dbdata:
+
+networks:
+  financial:
