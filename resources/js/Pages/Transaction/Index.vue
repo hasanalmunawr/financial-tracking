@@ -65,7 +65,7 @@ loadTransactions();
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Transaction</h2>
+            <h2 class="font-semibold text-xl leading-tight">Transaction</h2>
         </template>
 
 
@@ -81,7 +81,11 @@ loadTransactions();
                         <input
                             id="month-picker"
                             type="month"
-                            class="border rounded px-3 py-2 w-full md:w-48 text-sm"
+                            class="mb-4 border border-gray-300 dark:border-gray-600
+         bg-white dark:bg-gray-800
+         text-black dark:text-white
+         placeholder-gray-500 dark:placeholder-gray-400
+         rounded px-3 py-2 w-full max-w-xs"
                             v-model="selectedMonth"
                         />
                     </div>
@@ -115,19 +119,32 @@ loadTransactions();
                             <p class="text-sm text-gray-600">{{ formatDate(item.date) }} - {{ item.rekening_name }}</p>
                             <p class="font-medium text-gray-900">{{ item.description }}</p>
                             <p class="text-sm text-gray-500">Kategori: {{ item.category_name }} | Jenis:
-                                <span :class="item.type === 'income' ? 'text-green-600' : 'text-red-600'">
+                                <span
+                                    :class="{
+                                  'text-green-700': item.type === 'income',
+                                  'text-red-700': item.type === 'expense',
+                                  'text-blue-700': item.type === 'mutasi'
+                                }"
+                                >
                                {{ item.type }}
                             </span>
                             </p>
                         </div>
                         <div class="text-right">
                             <p
-                                :class="item.type === 'income' ? 'text-green-700' : 'text-red-700'"
+                                :class="{
+                                  'text-green-700': item.type === 'income',
+                                  'text-red-700': item.type === 'expense',
+                                  'text-blue-700': item.type === 'mutasi'
+                                }"
                                 class="text-lg font-semibold"
                             >
-                                {{ item.type === 'income' ? '+' : '-' }} {{ formatRupiah(item.amount) }}
+                                <span v-if="item.type === 'income'">+ {{ formatRupiah(item.amount) }}</span>
+                                <span v-else-if="item.type === 'expense'">− {{ formatRupiah(item.amount) }}</span>
+                                <span v-else-if="item.type === 'mutasi'">→ {{ formatRupiah(item.amount) }}</span>
                             </p>
                         </div>
+
                     </li>
                 </ul>
 

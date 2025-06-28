@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full mx-auto p-4 bg-white shadow rounded">
+    <div class="w-full mx-auto p-4 shadow rounded">
         <v-chart class="w-full h-96" :option="chartMonthlyTransaction" autoresize/>
     </div>
 </template>
