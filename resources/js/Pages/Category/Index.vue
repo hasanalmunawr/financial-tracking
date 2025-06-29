@@ -43,7 +43,7 @@ const formatDate = (datetime, locale = 'id-ID') => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Transaction Category</h2>
+            <h2 class="font-semibold text-xl leading-tight">Transaction Category</h2>
         </template>
 
         <ContainerContent>
@@ -56,8 +56,8 @@ const formatDate = (datetime, locale = 'id-ID') => {
             </div>
 
             <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-200">
                     <tr>
                         <th scope="col" class="px-6 py-3">
                             No
@@ -71,27 +71,30 @@ const formatDate = (datetime, locale = 'id-ID') => {
                         <th scope="col" class="px-6 py-3">
                             Action
                         </th>
-
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(category, index) in categories" :key="category.id" class="bg-white border-b border-gray-200">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    <tr
+                        v-for="(category, index) in categories"
+                        :key="category.id"
+                        class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-600"
+                    >
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ index + 1 }}
                         </th>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ category.name }}
                         </th>
                         <td class="px-6 py-4">
                             {{ formatDate(category.created_at) }}
                         </td>
                         <td class="px-6 py-4">
-                            <button>Edit</button>
+                            <button class="text-blue-600 dark:text-blue-400 hover:underline">Edit</button>
                         </td>
-
                     </tr>
                     </tbody>
                 </table>
+
             </div>
 
         </ContainerContent>

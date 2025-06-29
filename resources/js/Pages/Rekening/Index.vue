@@ -48,7 +48,7 @@ const newRekening = () => {
     <Head title="Rekening"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Rekening</h2>
+            <h2 class="font-semibold text-xl leading-tight">Rekening</h2>
         </template>
 
         <ContainerContent>
@@ -62,34 +62,26 @@ const newRekening = () => {
 
 
             <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-300">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-200">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            No
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Type
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Saldo
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Action
-                        </th>
-
+                        <th scope="col" class="px-6 py-3">No</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Type</th>
+                        <th scope="col" class="px-6 py-3">Saldo</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(rekening, index) in rekenings" :key="rekening.id"
-                        class="bg-white border-b border-gray-200">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                    <tr
+                        v-for="(rekening, index) in rekenings"
+                        :key="rekening.id"
+                        class="border-b border-gray-200 dark:border-gray-700"
+                    >
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ index + 1 }}
                         </th>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ rekening.name }}
                         </th>
                         <td class="px-6 py-4">
@@ -97,19 +89,21 @@ const newRekening = () => {
                         </td>
                         <td class="relative px-6 py-4">
                             {{ showNominalMap[index] ? formatRupiah(rekening.balance) : '**********' }}
-                            <span @click="toggleNominal(index)"
-                                  class="absolute right-3 top-3 h-5 w-5 cursor-pointer text-blue-500">
-                              <Eye v-if="!showNominalMap[index]"/>
-                              <EyeOff v-else/>
-                            </span>
+                            <span
+                                @click="toggleNominal(index)"
+                                class="absolute right-3 top-3 h-5 w-5 cursor-pointer text-blue-500"
+                            >
+          <Eye v-if="!showNominalMap[index]" />
+          <EyeOff v-else />
+        </span>
                         </td>
                         <td class="px-6 py-4">
-                            <button>Edit</button>
+                            <button class="text-blue-500 hover:underline">Edit</button>
                         </td>
-
                     </tr>
                     </tbody>
                 </table>
+
             </div>
 
         </ContainerContent>
